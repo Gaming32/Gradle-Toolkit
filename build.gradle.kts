@@ -1,5 +1,3 @@
-import java.net.URI
-
 plugins {
     id("com.github.johnrengelman.shadow") version("7.1.2")
     kotlin("jvm") version("1.6.21")
@@ -23,10 +21,14 @@ repositories {
     maven("https://maven.fabricmc.net/")
     maven("https://maven.minecraftforge.net/")
     maven("https://maven.architectury.dev/")
-    maven("https://repo.essential.gg/repository/maven-public/")
+    maven("https://repo.essential.gg/repository/maven-public")
 
     maven("https://maven.unifycraft.xyz/snapshots/")
     mavenLocal()
+}
+
+val shade: Configuration by configurations.creating {
+    configurations.implementation.get().extendsFrom(this)
 }
 
 dependencies {
@@ -45,7 +47,7 @@ dependencies {
     // Other
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.6.21")
     implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
-    implementation("net.kyori:blossom:1.3.1-UNIFYCRAFT")
+    implementation("net.kyori:blossom:1.3.0")
 
     // Publishing
     implementation("com.modrinth.minotaur:Minotaur:2.3.1")
@@ -61,7 +63,14 @@ java {
 tasks {
     named<Jar>("jar") {
         archiveBaseName.set(projectName)
+        dependsOn("shadowJar")
         from("LICENSE")
+    }
+
+    named<ShadowJar>("shadowJar") {
+        configurations = listOf(shade)
+        archiveClassifier.set("")
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 }
 
@@ -81,13 +90,13 @@ afterEvaluate {
 
                 maven {
                     name = "UnifyCraftRelease"
-                    url = URI.create("https://maven.unifycraft.xyz/releases")
+                    url = uri("https://maven.unifycraft.xyz/releases")
                     applyCredentials()
                 }
 
                 maven {
                     name = "UnifyCraftSnapshots"
-                    url = URI.create("https://maven.unifycraft.xyz/snapshots")
+                    url = uri("https://maven.unifycraft.xyz/snapshots")
                     applyCredentials()
                 }
             }
