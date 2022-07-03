@@ -1,8 +1,8 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import java.net.URI
 
 plugins {
     id("com.github.johnrengelman.shadow") version("7.1.2")
+    kotlin("jvm") version("1.6.21")
     `kotlin-dsl`
     `maven-publish`
 }
@@ -32,8 +32,8 @@ repositories {
 dependencies {
     // Language
     implementation(gradleApi())
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.0")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0")
+    implementation(kotlin("stdlib"))
+    implementation(kotlin("gradle-plugin"))
 
     // Architectury Loom
     implementation("gg.essential:architectury-loom:0.10.0.4")
@@ -43,7 +43,7 @@ dependencies {
     implementation("com.github.replaymod:preprocessor:48e02ad")
 
     // Other
-    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.7.0")
+    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.6.21")
     implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
     implementation("net.kyori:blossom:1.3.1-UNIFYCRAFT")
 
